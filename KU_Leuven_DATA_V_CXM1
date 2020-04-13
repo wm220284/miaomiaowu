@@ -1,12 +1,70 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
-  "description": "",
   "data": { "url": "https://raw.githubusercontent.com/wm220284/miaomiaowu/master/2019_Zhang_China_contact_common.csv","name":"contact"},
-  
-  "vconcat":[
+  "transform":[{
+    "lookup":"part_id",
+    "from":{
+      "data":{"url":"https://raw.githubusercontent.com/wm220284/miaomiaowu/master/2019_Zhang_China_participant_extra.csv"},
+      "key": "part_id",
+      "fields":["part_id",	"hh_id","part_age","part_gender"]
+    }
+  },
     
-  { "width":400,
+    {
+    "lookup":"part_id",
+    "from":{
+      "data":{"url":"https://raw.githubusercontent.com/wm220284/miaomiaowu/master/2019_Zhang_China_participant_common.csv","name":"participant2"},
+      "key":"part_id",
+      "fields": ["hh_id","part_age","part_gender","part_id"]
+    }
+   } ,
+    {
+    "lookup":"hh_id",
+    "from":{
+      "data":{"url":"https://raw.githubusercontent.com/wm220284/miaomiaowu/master/2019_Zhang_China_hh_common.csv"},
+      "key":"hh_id",
+      "fields": ["hh_size"]
+    }
+  }
+  ],
+  "vconcat":[{
+
+  "concat":[{
+    "width":400,
     "height":300,
+      "transform":[
+    {"filter":{"selection":"gender_c"}},
+    {"filter":{"selection":"gender"}}
+  ],
+  "selection":{
+    "gender":{
+      "type":"single",
+      "fields":["part_gender"],
+      "bind":{"input":"select","options":[null,"F","M"]}
+    },
+    "selection_i":{
+      "type":"interval",
+      "empty":"all"
+    }
+  },
+  "mark":{
+    "type":"point",
+    "filled":true},
+  "encoding":{
+    "x":{"field":"hh_size","type":"nominal"},
+    "y":{"field":"part_age","type":"quantitative"},
+    "color":{"field":"part_gender","type":"nominal"},
+    "size":{"aggregate":"distinct","field":"part_id","type":"quantitative"},
+    "opacity":{"condition":{"selection":"selection_i","value":1},
+    "value":0.2}
+  }},
+  {"width":400,
+    "height":300,
+          "transform":[
+    {"filter":{"selection":"gender"}},
+    {"filter":{"selection":"gender_c"}},
+     {"filter":{"selection":"selection_i"}}
+  ],
      "selection":{
     "gender_c":{
       "type":"single",
@@ -24,8 +82,13 @@
     "color":{"field":"cnt_gender","type":"nominal"},
     "opacity":{"condition":{"selection":"gender_c","value":1},
     "value":0}
-}},
-    {"selection":{
+}
+  }]
+  },
+  {
+    "width":800,
+    "height":200,
+    "selection":{
     "gender_c":{
       "type":"single",
       "fields":["cnt_gender"],
@@ -33,7 +96,9 @@
     }
   },
   "transform":[
-    {"filter":{"selection":"gender_c"}}
+    {"filter":{"selection":"gender_c"}},
+     {"filter":{"selection":"gender_c"}},
+     {"filter":{"selection":"selection_i"}}
   ],
   "mark":{
     "type":"bar",
@@ -42,7 +107,7 @@
     "y":{"field":"cnt_way","type":"nominal"},
     "x":{"aggregate":"count","type":"quantitative"},
     "color":{"field":"cnt_gender","type":"nominal"}
+    }
+  }]
 
-}}
-  ]
-  }
+}
