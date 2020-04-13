@@ -1,0 +1,48 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+  "description": "",
+  "data": { "url": "https://raw.githubusercontent.com/wm220284/miaomiaowu/master/2019_Zhang_China_contact_common.csv","name":"contact"},
+  
+  "vconcat":[
+    
+  { "width":400,
+    "height":300,
+     "selection":{
+    "gender_c":{
+      "type":"single",
+      "fields":["cnt_gender"],
+      "bind":{"input":"select","options":[null,"F","M","NA"]}
+    }
+  },
+    "mark":{
+    "type":"point",
+    "filled":true},
+  "encoding":{
+    "y":{"field":"cnt_age_exact","type":"quantitative"},
+    "x":{"field":"duration_multi","type":"nominal"},
+    "size":{"aggregate":"count","type":"quantitative"},
+    "color":{"field":"cnt_gender","type":"nominal"},
+    "opacity":{"condition":{"selection":"gender_c","value":1},
+    "value":0}
+}},
+    {"selection":{
+    "gender_c":{
+      "type":"single",
+      "fields":["cnt_gender"],
+      "bind":{"input":"select","options":[null,"F","M","NA"]}
+    }
+  },
+  "transform":[
+    {"filter":{"selection":"gender_c"}}
+  ],
+  "mark":{
+    "type":"bar",
+    "filled":true},
+  "encoding":{
+    "y":{"field":"cnt_way","type":"nominal"},
+    "x":{"aggregate":"count","type":"quantitative"},
+    "color":{"field":"cnt_gender","type":"nominal"}
+
+}}
+  ]
+  }
