@@ -93,11 +93,16 @@
       "type":"single",
       "fields":["cnt_gender"],
       "bind":{"input":"select","options":[null,"F","M","NA"]}
+    },
+    "gender":{
+      "type":"single",
+      "fields":["part_gender"],
+      "bind":{"input":"select","options":[null,"F","M"]}
     }
   },
   "transform":[
     {"filter":{"selection":"gender_c"}},
-     {"filter":{"selection":"gender_c"}},
+     {"filter":{"selection":"gender"}},
      {"filter":{"selection":"selection_i"}}
   ],
   "mark":{
